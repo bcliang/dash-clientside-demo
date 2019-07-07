@@ -22,7 +22,7 @@ def get_layout(**kwargs):
 
                 Upload a data file (single-row header), and then download the data out of the figure. This demo supports CSV and XLS file formats.
 
-                You can find an example file in [`/examples/example_data.csv`](https://github.com/bcliang/dash-clientside-demo/examples/example_data.csv)
+                You can find an example file in [`/examples/example_data.csv`](https://github.com/bcliang/dash-clientside-demo/blob/master/examples/example_upload_data.csv)
 
                 This page is meant to demonstrate the ability of the clientside-based File download to exceeed browser size limitations.
                 """)
