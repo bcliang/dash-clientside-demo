@@ -39,8 +39,9 @@ def get_layout(**kwargs):
 
                 - Dash app boilerplate generated using [`slapdash`](https://github.com/ned2/slapdash).
                 - Graphs use the [`dash-extendable-graph`](https://github.com/bcliang/dash-extendable-graph) component in place of `dcc.Graph`
+                - Upload component relies on Pandas to parse CSV/XLS files.
                 - Clientside data download implemented using [`FileSaverJS`](https://github.com/eligrey/FileSaver.js).
-                - Clientside filter implemented using [`KalmanJS`](https://github.com/wouterbulten/kalmanjs).
+                - Clientside filter implemented using [`KalmanJS`](https://github.com/wouterbulten/kalmanjs). *TODO*
 
                 ## eof
 
