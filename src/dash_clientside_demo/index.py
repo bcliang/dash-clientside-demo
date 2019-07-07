@@ -2,7 +2,7 @@ import dash_html_components as html
 
 from .app import app
 from .utils import DashRouter, DashNavBar
-from .pages import intro, demo, page3
+from .pages import intro, demo, upload
 from .components import fa
 
 
@@ -13,7 +13,7 @@ urls = (
     ("", intro.get_layout),
     ("intro", intro.get_layout),
     ("demo", demo.get_layout),
-    ("page3", page3.layout),
+    ("upload", upload.get_layout),
 )
 
 # Ordered iterable of navbar items: tuples of `(route, display)`, where `route`
@@ -22,8 +22,8 @@ urls = (
 # keyword argument for a Dash component (ie a Dash Component or a string).
 nav_items = (
     ("intro", html.Div([fa("fas fa-keyboard"), "Introduction"])),
-    ("demo", html.Div([fa("fas fa-chart-area"), "Demo"])),
-    ("page3", html.Div([fa("fas fa-chart-line"), "Page 3"])),
+    ("demo", html.Div([fa("fas fa-chart-area"), "Real-time"])),
+    ("upload", html.Div([fa("fas fa-chart-line"), "Upload"])),
 )
 
 router = DashRouter(app, urls)

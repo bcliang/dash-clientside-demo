@@ -5,7 +5,7 @@
 
 # Your App's title. The value of this parameter will be propagated into
 # `app.title`
-TITLE = "Real-time Demo"
+TITLE = "Clientside Demo"
 
 # The value of this parameter will be propagated into both
 # `app.scripts.config.serve_locally` and `app.css.config.serve_locally`

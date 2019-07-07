@@ -21,7 +21,15 @@ def get_layout(**kwargs):
     return html.Div([
         dbc.Container([
             dbc.Row([
-                html.H3("BTC-USD Chart"),
+                dcc.Markdown(
+                    """
+                    # BTC-USD Chart
+
+                    This page shows a live-streaming graph. The dropdowns and buttons use clientside callbacks for improved responsiveness.
+
+                    *Note* The "Import Price History" button fetches a file from the application's web-accessible "assets" folder.
+                    """
+                ),
                 dcc.Interval(id='btc-signal-interval',
                              interval=5000,  # 1 min
                              max_intervals=-1
