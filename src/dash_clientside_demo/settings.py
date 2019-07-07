@@ -37,7 +37,7 @@ ROUTES_PATHNAME_PREFIX = None
 EXTERNAL_STYLESHEETS = []
 
 # Externally hosted Javascript files go in here.
-EXTERNAL_SCRIPTS = []
+EXTERNAL_SCRIPTS = ['https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js']
 
 
 #

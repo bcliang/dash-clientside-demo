@@ -12,7 +12,7 @@ from .components import fa
 urls = (
     ("", intro.get_layout),
     ("intro", intro.get_layout),
-    ("demo", demo.layout),
+    ("demo", demo.get_layout),
     ("page3", page3.layout),
 )
 
