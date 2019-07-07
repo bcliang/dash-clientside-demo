@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 # Package meta-data.
 NAME = "Dash Clientside Demo"
-DESCRIPTION = "An application demonstrating real-time data visualization using dash with clientside callbakcs."
+DESCRIPTION = "An application demonstrating real-time data visualization using dash with clientside callbacks."
 
 # These can be set to None if you want to omit them
 URL = "https://github.com/bcliang/dash-clientside-demo"

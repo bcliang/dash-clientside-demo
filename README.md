@@ -1,6 +1,6 @@
 # Dash Clientside Demo
 
-Demo Dash application visualizing a real-time data signal (BTC-USD). The application
+Demo Dash application visualizing a real-time data signal (BTC-USD), featuring:
 - multi-page routing and navigation (slapdash, dash-bootstrap-components)
 - trace updates using extendData rather than figure (dash-extendable-graph)
 - clientside callbacks implemented for basic UI actions (figure relayout, sampling frequency, disable/enable)
