@@ -13,18 +13,6 @@ import json
 import requests
 
 
-def check_coinbase_price(request_time=None):
-    if request_time is None:
-        request_time = datetime.utcnow().isoformat(' ')[:22]
-
-    response = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
-    if not response:
-        return {}
-    response = response.json()
-    output = dict(x=[request_time], y=[float(response['data']['amount'])])
-    return output
-
-
 def get_layout(**kwargs):
     initial_text = kwargs.get("text", "Type some text into me!")
 
@@ -125,20 +113,48 @@ def get_layout(**kwargs):
         """
 
 
-app.clientside_callback(
-    ClientsideFunction('download', 'csvDownload'),
-    Output('button-csv-target', 'children'),
-    [Input('button-csv-download', 'n_clicks')],
+"""
+" Python Callbacks contain business logic.
+"""
+
+
+def check_coinbase_price(request_time=None):
+    if request_time is None:
+        request_time = datetime.utcnow().isoformat(' ')[:22]
+
+    response = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
+    if not response:
+        return {}
+    response = response.json()
+    output = dict(x=[request_time], y=[float(response['data']['amount'])])
+    return output
+
+
+@app.callback(
+    Output('btc-signal', 'extendData'),
+    [Input('btc-signal-interval', 'n_intervals')],
     [State('btc-signal', 'figure')]
 )
+def request_current_price(n_clicks, fig):
+    "we should execute our top-secret business logic here"
+    # check the coindesk bpi api
+    # response = requests.get('https://api.coindesk.com/v1/bpi/currentprice.json')
+    output = check_coinbase_price()
 
-app.clientside_callback(
-    ClientsideFunction('download', 'loadHistorical'),
-    Output('button-history-target', 'children'),
-    [Input('button-history-download', 'n_clicks')],
-    [State('btc-signal', 'extendData')]
-)
+    # you might normally do-something with the price signal here
 
+    if len(fig['data']) == 0:
+        output['name'] = 'BPI'
+        output['type'] = 'scattergl',
+        output['mode'] = 'lines+markers'
+    return [output]
+
+
+"""
+" Clientside callbacks are exposed to the browser. Use them for UI actions and other generic functionality
+"""
+
+""" UI Actions """
 app.clientside_callback(
     ClientsideFunction('ui', 'disable'),
     Output('button-history-download', 'disabled'),
@@ -160,18 +176,21 @@ app.clientside_callback(
     [State('btc-signal', 'figure')]
 )
 
-
-@app.callback(
-    Output('btc-signal', 'extendData'),
-    [Input('btc-signal-interval', 'n_intervals')],
+""" Download Actions """
+# FileSaverJS supports 500MB downloads from the browser!
+app.clientside_callback(
+    ClientsideFunction('download', 'csvDownload'),
+    Output('button-csv-target', 'children'),
+    [Input('button-csv-download', 'n_clicks')],
     [State('btc-signal', 'figure')]
 )
-def request_current_price(n_clicks, fig):
-    # check the coindesk bpi api
-    # response = requests.get('https://api.coindesk.com/v1/bpi/currentprice.json')
-    output = check_coinbase_price()
-    if len(fig['data']) == 0:
-        output['name'] = 'BPI'
-        output['type'] = 'scattergl',
-        output['mode'] = 'lines+markers'
-    return [output]
+
+# Use JS to fetch files
+app.clientside_callback(
+    ClientsideFunction('download', 'loadHistorical'),
+    Output('button-history-target', 'children'),
+    [Input('button-history-download', 'n_clicks')],
+    [State('btc-signal', 'extendData')]
+)
+
+""" Simple Operations (basic signal processing) """
