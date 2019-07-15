@@ -14,7 +14,6 @@ import requests
 
 
 def get_layout(**kwargs):
-    initial_text = kwargs.get("text", "Type some text into me!")
 
     # Note that if you need to access multiple values of an argument, you can
     # use args.getlist("param")
@@ -27,7 +26,11 @@ def get_layout(**kwargs):
 
                     This page shows a live-streaming graph. The dropdowns and buttons use clientside callbacks for improved responsiveness.
 
-                    *Note* The "Import Price History" button fetches a file from the application's web-accessible "assets" folder.
+                    Notes:
+
+                    - JSON download saves the complete contents of the figure.data object (dict) to JSON (no interpretation/manipulation required).
+                    - CSV download relies on some data manipulation to transform the figure data into CSV format (see `figDataToStr` from [assets/app-download.js#L7](https://github.com/bcliang/dash-clientside-demo/blob/master/src/dash_clientside_demo/assets/app-download.js#L7)). In this case, the figure traces are of type ScatterGl, and the content saved is the `(x,y)` paired values.
+                    - The "Import Price History" button fetches a file from the application's web-accessible "assets" folder.
                     """
                 ),
                 dcc.Interval(id='btc-signal-interval',
