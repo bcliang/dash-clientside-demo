@@ -14,7 +14,6 @@ import requests
 
 
 def get_layout(**kwargs):
-    initial_text = kwargs.get("text", "Type some text into me!")
 
     # Note that if you need to access multiple values of an argument, you can
     # use args.getlist("param")
@@ -27,7 +26,11 @@ def get_layout(**kwargs):
 
                     This page shows a live-streaming graph. The dropdowns and buttons use clientside callbacks for improved responsiveness.
 
-                    *Note* The "Import Price History" button fetches a file from the application's web-accessible "assets" folder.
+                    Notes:
+
+                    - JSON download saves the complete contents of the figure.data object (dict) to JSON (no interpretation/manipulation required).
+                    - CSV download relies on some data manipulation to transform the figure data into CSV format (see `figDataToStr` from [assets/app-download.js#L7](https://github.com/bcliang/dash-clientside-demo/blob/master/src/dash_clientside_demo/assets/app-download.js#L7)). In this case, the figure traces are of type ScatterGl, and the content saved is the `(x,y)` paired values.
+                    - The "Import Price History" button fetches a file from the application's web-accessible "assets" folder.
                     """
                 ),
                 dcc.Interval(id='btc-signal-interval',
@@ -98,6 +101,10 @@ def get_layout(**kwargs):
                 dbc.Col([
                     dbc.Button('Download CSV', id='button-csv-download'),
                     html.Div(id='button-csv-target', style=dict(display='none'))
+                ], style={'text-align': 'left'}),
+                dbc.Col([
+                    dbc.Button('Download JSON', id='button-json-download'),
+                    html.Div(id='button-json-target', style=dict(display='none'))
                 ], style={'text-align': 'left'}),
                 dbc.Col([
                     dbc.Button('Import Price History', id='button-history-download'),
@@ -185,11 +192,21 @@ app.clientside_callback(
 )
 
 """ Download Actions """
-# FileSaverJS supports 500MB downloads from the browser!
+# FileSaverJS supports >500MB downloads from the browser!
+# csvDownload runs figDataToStr(), converting a figure's timeseries data into a table (x,y1,y2,y...)
+# note: assumes all traces are scatter format (x,y) and that all traces share the same x-values.
 app.clientside_callback(
     ClientsideFunction('download', 'csvDownload'),
     Output('button-csv-target', 'children'),
     [Input('button-csv-download', 'n_clicks')],
+    [State('btc-signal', 'figure')]
+)
+
+# json stringify the figure object; works for any type of Graph trace(s)
+app.clientside_callback(
+    ClientsideFunction('download', 'jsonDownload'),
+    Output('button-json-target', 'children'),
+    [Input('button-json-download', 'n_clicks')],
     [State('btc-signal', 'figure')]
 )
 

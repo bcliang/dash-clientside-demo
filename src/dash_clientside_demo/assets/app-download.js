@@ -3,6 +3,7 @@ if (!window.dash_clientside) {
 }
 
 const GRAPH_ID = "btc-signal";
+const SAVE_FILE_NAME = "bpi";
 function figDataToStr(fig, colDelimiter = ",", rowDelimiter = "\n") {
     if (typeof fig.data == "undefined") {
         console.warn(
@@ -61,12 +62,28 @@ window.dash_clientside.download = {
         const footer = "Downloaded".concat(colDelimiter, d.toISOString());
 
         // generate file and send through file-saver
-        const file = new File([dataTable.concat("\n\n", footer)], "bpi.csv", {
+        const file = new Blob([dataTable.concat("\n\n", footer)], {
             type: "text/csv;charset=utf-8"
         });
 
         console.log("downloading figure data to csv.");
-        saveAs(file);
+        saveAs(file, SAVE_FILE_NAME + ".csv");
+    },
+    jsonDownload: function(trigger, fig) {
+        if (typeof trigger == "undefined" || typeof fig.data == "undefined") {
+            return false;
+        }
+
+        // generate formatted json blob
+        const dataTable = JSON.stringify(fig.data, null, 4);
+
+        // generate file and send through file-saver
+        const file = new Blob([dataTable], {
+            type: "application/json;charset=utf-8"
+        });
+
+        console.log("downloading figure data to json.");
+        saveAs(file, SAVE_FILE_NAME + ".json");
     },
     loadHistorical: function(trigger, extend) {
         if (typeof trigger == "undefined") {
