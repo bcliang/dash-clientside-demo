@@ -100,6 +100,10 @@ def get_layout(**kwargs):
                     html.Div(id='button-csv-target', style=dict(display='none'))
                 ], style={'text-align': 'left'}),
                 dbc.Col([
+                    dbc.Button('Download JSON', id='button-json-download'),
+                    html.Div(id='button-json-target', style=dict(display='none'))
+                ], style={'text-align': 'left'}),
+                dbc.Col([
                     dbc.Button('Import Price History', id='button-history-download'),
                     html.Div(id='button-history-target', style=dict(display='none'))
                 ], style={'text-align': 'left'})
@@ -185,11 +189,21 @@ app.clientside_callback(
 )
 
 """ Download Actions """
-# FileSaverJS supports 500MB downloads from the browser!
+# FileSaverJS supports >500MB downloads from the browser!
+# csvDownload runs figDataToStr(), converting a figure's timeseries data into a table (x,y1,y2,y...)
+# note: assumes all traces are scatter format (x,y) and that all traces share the same x-values.
 app.clientside_callback(
     ClientsideFunction('download', 'csvDownload'),
     Output('button-csv-target', 'children'),
     [Input('button-csv-download', 'n_clicks')],
+    [State('btc-signal', 'figure')]
+)
+
+# json stringify the figure object; works for any type of Graph trace(s)
+app.clientside_callback(
+    ClientsideFunction('download', 'jsonDownload'),
+    Output('button-json-target', 'children'),
+    [Input('button-json-download', 'n_clicks')],
     [State('btc-signal', 'figure')]
 )
 
