@@ -2,8 +2,11 @@ if (!window.dash_clientside) {
     window.dash_clientside = {};
 }
 
-const GRAPH_ID = "btc-signal";
+if (!window.GRAPH_ID) {
+    window.GRAPH_ID = "btc-signal";
+}
 const SAVE_FILE_NAME = "bpi";
+
 function figDataToStr(fig, colDelimiter = ",", rowDelimiter = "\n") {
     if (typeof fig.data == "undefined") {
         console.warn(
@@ -97,12 +100,12 @@ window.dash_clientside.download = {
             .then(() => {
                 if (typeof extend == "undefined") {
                     console.log("prepending historical data");
-                    Plotly.addTraces(GRAPH_ID, {
+                    Plotly.addTraces(window.GRAPH_ID, {
                         x: Object.keys(data),
                         y: Object.values(data)
                     });
                     Plotly.restyle(
-                        GRAPH_ID,
+                        window.GRAPH_ID,
                         {
                             name: "BPI",
                             type: "scattergl",
@@ -114,7 +117,7 @@ window.dash_clientside.download = {
                 }
 
                 Plotly.prependTraces(
-                    GRAPH_ID,
+                    window.GRAPH_ID,
                     {x: [Object.keys(data)], y: [Object.values(data)]},
                     [0]
                 );

@@ -1,6 +1,9 @@
 if (!window.dash_clientside) {
     window.dash_clientside = {};
 }
+if (!window.GRAPH_ID) {
+    window.GRAPH_ID = "btc-signal";
+}
 
 window.dash_clientside.ui = {
     relayout: function(extendData, updateXRange, updateFigTitle, fig) {
@@ -13,7 +16,11 @@ window.dash_clientside.ui = {
             return false;
         }
 
-        const x1 = extendData[0].x.slice(-1).toString();
+        let newData = extendData;
+        if (newData.length > 1 && Array.isArray(newData[0])) {
+            newData = newData[0];
+        }
+        const x1 = newData[0].x.slice(-1).toString();
         let d = new Date(
             Date.parse(x1) - updateXRange * 86400000 - 420 * 60000
         );
@@ -29,7 +36,7 @@ window.dash_clientside.ui = {
         switch (updateFigTitle) {
             case 2:
                 updatedTitle.unshift(
-                    "price=" + extendData[0].y.slice(-1).toString()
+                    "price=" + newData[0].y.slice(-1).toString()
                 );
             case 1:
                 updatedTitle.unshift("time=" + x1 + "Z");
@@ -46,7 +53,7 @@ window.dash_clientside.ui = {
         };
 
         //console.log("relayout: ", update);
-        Plotly.relayout(GRAPH_ID, update);
+        Plotly.relayout(window.GRAPH_ID, update);
 
         return true;
     },

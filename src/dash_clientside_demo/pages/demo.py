@@ -111,20 +111,23 @@ def get_layout(**kwargs):
                     html.Div(id='button-history-target', style=dict(display='none'))
                 ], style={'text-align': 'left'})
             ], className='ui-row'),
+            dbc.Row([
+                dbc.Col('namespace: signal', style={'text-align': 'right'}),
+                dbc.Col([
+                    make_dropdown('btc-dropdown-filter',
+                                  'Filter',
+                                  ['None', 'Moving Average', 'Saviztky-Golay(8)'],
+                                  [0, 1, 2]),
+                    html.Div(id='signal-filter-target', style=dict(display='none')),
+                ], style={'text-align': 'left'}),
+                dbc.Col(html.Div(''), style={'text-align': 'left'}),
+                dbc.Col(html.Div(''), style={'text-align': 'left'})
+            ], className='ui-row'),
         ]),
     ])
 
     """
-        dbc.Row([
-            dbc.Col('namespace: signal', style={'text-align': 'right'}),
-            dbc.Col(
-                make_dropdown('btc-dropdown-filter',
-                              'Filter',
-                              ['mavg(10)', 'kalman'],
-                              [0, 1])
-            ),
-            html.Div(id='filter-target', style=dict(display='none')),
-        ]),
+
         """
 
 
@@ -135,7 +138,7 @@ def get_layout(**kwargs):
 
 def check_coinbase_price(request_time=None):
     if request_time is None:
-        request_time = datetime.utcnow().isoformat(' ')[:22]
+        request_time = datetime.utcnow().isoformat(' ')[: 22]
 
     response = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
     if not response:
@@ -157,12 +160,13 @@ def request_current_price(n_clicks, fig):
     output = check_coinbase_price()
 
     # you might normally do-something with the price signal here
-
     if len(fig['data']) == 0:
         output['name'] = 'BPI'
         output['type'] = 'scattergl',
         output['mode'] = 'lines+markers'
-    return [output]
+        return [output]
+
+    return [output], [0]  # extend the first trace (filter will be second trace)
 
 
 """
@@ -218,5 +222,12 @@ app.clientside_callback(
     [State('btc-signal', 'extendData')]
 )
 
-""" Simple Operations (basic signal processing) """
-# TODO
+
+""" Signal Processing """
+app.clientside_callback(
+    ClientsideFunction('signal', 'filterSignal'),
+    Output('signal-filter-target', 'children'),
+    [Input('btc-signal', 'relayoutData')],
+    [State('btc-signal', 'extendData'),
+     State('btc-dropdown-filter', 'value')],
+)
