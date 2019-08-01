@@ -17,9 +17,15 @@ window.dash_clientside.ui = {
         }
 
         let newData = extendData;
-        if (newData.length > 1 && Array.isArray(newData[0])) {
+        if (
+            newData.length > 1 &&
+            Array.isArray(newData[0]) &&
+            typeof newData[0][0] != "undefined" &&
+            typeof newData[0][0].x != "undefined"
+        ) {
             newData = newData[0];
         }
+
         const x1 = newData[0].x.slice(-1).toString();
         let d = new Date(
             Date.parse(x1) - updateXRange * 86400000 - 420 * 60000

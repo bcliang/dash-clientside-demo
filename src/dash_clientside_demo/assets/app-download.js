@@ -18,10 +18,13 @@ function figDataToStr(fig, colDelimiter = ",", rowDelimiter = "\n") {
     const data = fig.data;
 
     // create array-of-columns from data
-    let aggregated = data.map(elem => {
-        return elem.y;
-    });
-    aggregated.unshift(data[0].x); // add timestamp
+    let aggregated = data
+        .map(elem => {
+            return [elem.x, elem.y];
+        })
+        .reduce((a, c) => {
+            return a.concat(c);
+        });
 
     // reshape into array-of-rows
     aggregated = aggregated[0].map(function(col, i) {
@@ -33,12 +36,10 @@ function figDataToStr(fig, colDelimiter = ",", rowDelimiter = "\n") {
     });
 
     // generate table header from trace names
-    let lblArray = ["timestamp"]
-        .concat(
-            data.map(elem => {
-                return elem.name;
-            })
-        )
+    let lblArray = data
+        .map(elem => {
+            return ["timestamp"].concat(elem.name).join(colDelimiter);
+        })
         .join(colDelimiter);
     aggregated.unshift(lblArray); // add table header to top of aggregated
 
