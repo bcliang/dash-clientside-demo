@@ -16,16 +16,21 @@ window.dash_clientside.ui = {
             return false;
         }
 
-        let newData = extendData;
+        let newData = Array.from(extendData);
         if (
             newData.length > 1 &&
             Array.isArray(newData[0]) &&
-            typeof newData[0][0] != "undefined" &&
-            typeof newData[0][0].x != "undefined"
+            typeof newData[0][0] != "undefined"
         ) {
             newData = newData[0];
         }
 
+        if (typeof newData[0].x == "undefined") {
+            newData[0] = {
+                x: fig.data[0].x.slice(-1),
+                y: fig.data[0].y.slice(-1)
+            };
+        }
         const x1 = newData[0].x.slice(-1).toString();
         let d = new Date(
             Date.parse(x1) - updateXRange * 86400000 - 420 * 60000

@@ -33,9 +33,13 @@ window.dash_clientside.signal = {
             return false;
         }
 
+        const rawData = extendData[0].shift();
+        if (typeof rawData == "undefined") {
+            return false;
+        }
+
         const filtTraceExists =
             document.getElementById(window.GRAPH_ID).data.length > 1;
-        const rawData = extendData[0].shift();
         let filtData = [];
 
         // update browser store
