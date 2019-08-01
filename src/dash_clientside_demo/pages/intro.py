@@ -35,13 +35,19 @@ def get_layout(**kwargs):
                 - Real-time BTC Spot comes from the [Coinbase Prices API v2](https://developers.coinbase.com/api/v2#get-spot-price).
                 - Historical Daily BPI close data was downloaded from the [Coindesk Price Index API v1](https://www.coindesk.com/api).
 
+                ## Signal Processing
+
+                The provided examples (15-pt moving average, 8th order Savitzky-Golay) introduce how to implement straightforward operations on real-time data in the browser. It also demonstrates the use of clientside callbacks to add additional traces to a figure.
+
+                - Other approaches might include use of external packages for signal processing/manipulation.
+                - The `signal` namespace also introduces use of a queue (`window.dash_clientside.signal.history`) for working with historical data (as opposed to accessing the entire figure trace data directly).
+
                 ## Dependencies
 
                 - Dash app boilerplate generated using [`slapdash`](https://github.com/ned2/slapdash).
                 - Graphs use the [`dash-extendable-graph`](https://github.com/bcliang/dash-extendable-graph) component in place of `dcc.Graph`
                 - Upload component relies on Pandas to parse CSV/XLS files.
                 - Clientside data download implemented using [`FileSaverJS`](https://github.com/eligrey/FileSaver.js).
-                - Clientside filter implemented using [`KalmanJS`](https://github.com/wouterbulten/kalmanjs). *TODO*
 
                 ## eof
 

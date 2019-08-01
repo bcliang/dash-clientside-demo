@@ -29,7 +29,7 @@ def get_layout(**kwargs):
                     Notes:
 
                     - JSON download saves the complete contents of the figure.data object (dict) to JSON (no interpretation/manipulation required).
-                    - CSV download relies on some data manipulation to transform the figure data into CSV format (see `figDataToStr` from [assets/app-download.js#L7](https://github.com/bcliang/dash-clientside-demo/blob/master/src/dash_clientside_demo/assets/app-download.js#L7)). In this case, the figure traces are of type ScatterGl, and the content saved is the `(x,y)` paired values.
+                    - CSV download relies on some data manipulation to transform the figure data into CSV format (see `figDataToStr` from [assets/app-download.js#L7](https://github.com/bcliang/dash-clientside-demo/blob/master/src/dash_clientside_demo/assets/app-download.js#L7)). In this case, the figure traces are of type ScatterGl, and the content saved is the `(x,y)` paired values. Each trace takes up 2 columns (`timestamp`, `value`) in the resulting file.
                     - The "Import Price History" button fetches a file from the application's web-accessible "assets" folder.
                     """
                 ),
